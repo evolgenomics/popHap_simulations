@@ -5,6 +5,7 @@ echo "***NOTE: The entire pipeline with 968 samples takes a long time to run. Co
 echo "[run_all.sh] Setting up...
 ";
 
+chmod 755 setup.sh
 ./setup.sh
 
 echo "[run_mspms.sh] Simulate using mspsm 968 haplotypes, 13505 SNPs, at 10 rho using the tag \"example\"...
