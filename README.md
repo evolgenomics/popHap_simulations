@@ -39,7 +39,7 @@ To help you get familiar with the simulation scheme, I have written a quick wrap
 ```
 git clone https://github.com/evolgenomics/popHap_simulations.git
 cd popHap_simulations
-./setup.sh
+chmod 755 ./run_all.sh
 ./run_all.sh
 ```
 
