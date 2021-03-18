@@ -7,6 +7,8 @@ for folder in sourceData altFa simARG simTrees simBam simFastq simHaps simMuts l
 	mkdir $folder;
 done
 
+chmod 755 scripts/*
+
 echo "
 [setup.sh] Getting and indexing the reference genome assembly...
 
