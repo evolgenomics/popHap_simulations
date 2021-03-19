@@ -23,11 +23,11 @@ cd ..
 echo "[STITCH_simulate.sh] Simulating reads...
 ";
 
-for i in `seq 0 967`; do dwgsim -e 0.001 -E 0.005 -d 250 -s 150 -H -o 1 -C 10 -1 150 -2 150 -x sourceData/focal_region.bed altFa/PC062_merged_Herat1603_3.45Mb.simBlock.hap_$i.$tag.fa simFastq/hap_$i.$tag 2&> log/$tag.dwgsim.stderr.log  ; done
+for i in `seq 0 967`; do dwgsim -e 0.001 -E 0.005 -d 250 -s 150 -H -o 1 -C 10 -1 150 -2 150 -x sourceData/focal_region.bed altFa/PC062_merged_Herat1603_3.45Mb.simBlock.hap_$i.$tag.fa simFastq/hap_$i.$tag 2> log/$tag.dwgsim.stderr.log  ; done
 echo "[STITCH_simulate.sh] Placing simulated reads against canonical reference assembly...
 ";
 if [ ! -e simBam/$tag ]; then mkdir simBam/$tag; fi
-for i in `seq 0 967`; do bwa mem -O 20 -E 20 -B 1 sourceData/helera1_demo_Herato1603.fa simFastq/hap_$i.$tag.bwa.read1.fastq.gz simFastq/hap_$i.$tag.bwa.read2.fastq.gz -t 48 -O BAM | samtools sort - -@ 48 -O BAM -o simBam/$tag/hap_$i.$tag.bam; done 2&> log/$tag.dwgsim.stderr.log
+for i in `seq 0 967`; do bwa mem -O 20 -E 20 -B 1 sourceData/helera1_demo_Herato1603.fa simFastq/hap_$i.$tag.bwa.read1.fastq.gz simFastq/hap_$i.$tag.bwa.read2.fastq.gz -O BAM | samtools sort - -O BAM -o simBam/$tag/hap_$i.$tag.bam; done 2> log/$tag.dwgsim.stderr.log
 ####
 
 cd simBam
