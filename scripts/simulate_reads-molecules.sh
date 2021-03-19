@@ -33,9 +33,9 @@ for i in `seq 0 967`; do bwa mem -O 20 -E 20 -B 1 sourceData/helera1_demo_Herato
 cd simBam
 for i in `seq 0 967`; do echo $i; perl ../scripts/simMols.pl $i $tag; done
 for i in `seq 0 2 967`; do odd=`echo "$i+1" | bc`; echo $i"	"$odd; samtools merge -c -p -f $tag/hap_$i.linkedReads.diploid.$tag.bam $tag/hap_$i.linkedReads.haploid.$tag.bam $tag/hap_$odd.linkedReads.haploid.$tag.bam; samtools index $tag/hap_$i.linkedReads.diploid.$tag.bam; done
-ls $tag/hap_*.linkedReads.diploid.$tag.bam | sort -k 1,1V > bamfiles.linkedReads.$tag.968.list
 ##
 cd ..
+ls simBam/$tag/hap_*.linkedReads.diploid.$tag.bam | sort -k 1,1V > bamfiles.linkedReads.$tag.968.list
 
 
 #cd STITCH_968_linkedReads_$tag 
