@@ -59,19 +59,10 @@ bcftools query -f "%CHROM\t%POS[\t%GT\t%PS\t%PQ\t%PD]\n" $tmp/$out.$tag.hapcut2.
 tabix -b 2 -e 2 $tmp/$out.$tag.hapcut2.threshold_30.output.phased.annot.gz
 tabix -b 2 -e 2 $tmp/$out.$tag.hapcut2.threshold_30.unlinked.output.phased.annot.gz
 ###
-#echo "bcftools annotate -h ../../add.hdr -a $out.$tag.hapcut2.threshold_30.output.phased.annot.gz $sampleVCF -c CHROM,POS,FMT/PG,FMT/PS,FMT/PQ,FMT/PD -m +HAPCUT=1 | bcftools view - -Oz -o ${sampleVCF/.vcf/.HAPCUT2.vcf.gz};" 
-##echo "Combining annotations into single VCF..." 
-###bcftools annotate -h add.hdr -a $tmp/$out.$tag.hapcut2.threshold_30.output.phased.annot.gz $tmp/$sampleVCF -c CHROM,POS,FMT/GT,FMT/PS,FMT/PQ,FMT/PD -m +HAPCUT=1 | /fml/chones/local/bin/bcftools view - -Oz -o $tmp/${sampleVCF/.vcf/.HAPCUT2.vcf.gz}; 
-bcftools annotate -h ../add.hdr -a $tmp/$out.$tag.hapcut2.threshold_30.output.phased.annot.gz $tmp/$sampleVCF -c CHROM,POS,FMT/GX,FMT/PS,FMT/PQ,FMT/PD -m +HAPCUT=1 |  awk '!/<ID=GX/' | sed 's/:GX:/:GT:/' | /fml/chones/local/bin/bcftools view - -Oz -o $tmp/${sampleVCF/.vcf/.HAPCUT2.vcf.gz}; 
-bcftools annotate -h ../add.hdr -a $tmp/$out.$tag.hapcut2.threshold_30.unlinked.output.phased.annot.gz $tmp/$sampleVCF -c CHROM,POS,FMT/GX,FMT/PS,FMT/PQ,FMT/PD -m +HAPCUT=1 |  awk '!/<ID=GX/' | sed 's/:GX:/:GT:/' | /fml/chones/local/bin/bcftools view - -Oz -o $tmp/${sampleVCF/.vcf/.HAPCUT2_unlinked.vcf.gz}; 
+bcftools annotate -h ../../sourceData/add.hdr -a $tmp/$out.$tag.hapcut2.threshold_30.output.phased.annot.gz $tmp/$sampleVCF -c CHROM,POS,FMT/GX,FMT/PS,FMT/PQ,FMT/PD -m +HAPCUT=1 |  awk '!/<ID=GX/' | sed 's/:GX:/:GT:/' | /fml/chones/local/bin/bcftools view - -Oz -o $tmp/${sampleVCF/.vcf/.HAPCUT2.vcf.gz}; 
+bcftools annotate -h ../../sourceData/add.hdr -a $tmp/$out.$tag.hapcut2.threshold_30.unlinked.output.phased.annot.gz $tmp/$sampleVCF -c CHROM,POS,FMT/GX,FMT/PS,FMT/PQ,FMT/PD -m +HAPCUT=1 |  awk '!/<ID=GX/' | sed 's/:GX:/:GT:/' | /fml/chones/local/bin/bcftools view - -Oz -o $tmp/${sampleVCF/.vcf/.HAPCUT2_unlinked.vcf.gz}; 
 tabix $tmp/${sampleVCF/.vcf/.HAPCUT2.vcf.gz}
 tabix $tmp/${sampleVCF/.vcf/.HAPCUT2_unlinked.vcf.gz}
-##
-##rm $tmp/$sampleHetVCF
-##rm $tmp/$sampleVCF
-#rm $tmp/$out.$tag.unlinked.fragments
-#rm $tmp/$out.$tag.linked.fragments
-#rm $tmp/$out.$tag.hapcut2.threshold_30.*output.phased.annot.gz*
 
 mv -v $tmp/${sampleVCF/.vcf/.HAPCUT2.vcf.gz}* $out_dir/
 mv -v $tmp/${sampleVCF/.vcf/.HAPCUT2_unlinked.vcf.gz}* $out_dir/
