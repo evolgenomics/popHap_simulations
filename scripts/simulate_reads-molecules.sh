@@ -35,15 +35,5 @@ for i in `seq 0 967`; do echo $i; perl ../scripts/simMols.pl $i $tag; done
 for i in `seq 0 2 967`; do odd=`echo "$i+1" | bc`; echo $i"	"$odd; samtools merge -c -p -f $tag/hap_$i.linkedReads.diploid.$tag.bam $tag/hap_$i.linkedReads.haploid.$tag.bam $tag/hap_$odd.linkedReads.haploid.$tag.bam; samtools index $tag/hap_$i.linkedReads.diploid.$tag.bam; done
 ##
 cd ..
-ls simBam/$tag/hap_*.linkedReads.diploid.$tag.bam | sort -k 1,1V > bamfiles.linkedReads.$tag.968.list
+ls simBam/$tag/hap_*.linkedReads.diploid.$tag.bam | sort -k 1,1V > simBam/bamfiles.linkedReads.$tag.968.list
 
-
-#cd STITCH_968_linkedReads_$tag 
-#./add_PL.helera1_demo.sh stitch.Herato1603.450000.550000.vcf.gz
-#perl ../check_truth_ARG.pl $tag
-#mkdir tmp;
-#for i in `seq 0 2 967`; do ../hapcutVcf.helera1_demo.sh hap_$i.linkedReads.diploid.100rho.bam stitch.Herato1603.450000.550000.PL.reheadered.vcf.gz 100rho; done
-#bcftools merge -Oz -o stitch.Herato1603.450000.550000.PL.HAPCUT2.linked.vcf.gz `ls tmp/hap_*.100rho.PL.HAPCUT2.vcf.gz | sort -k 1,1V`; 
-#bcftools merge -Oz -o stitch.Herato1603.450000.550000.PL.HAPCUT2.unlinked.vcf.gz `ls tmp/hap_*.100rho.PL.HAPCUT2_unlinked.vcf.gz | sort -k 1,1V`; 
-#tabix stitch.Herato1603.450000.550000.PL.HAPCUT2.linked.vcf.gz;
-#tabix stitch.Herato1603.450000.550000.PL.HAPCUT2_unlinked.vcf.gz
