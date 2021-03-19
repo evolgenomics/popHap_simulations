@@ -43,6 +43,15 @@ chmod 755 ./run_all.sh
 ./run_all.sh
 ```
 
+To run a simulated run with other parameters, run:
+```
+# Usage - ./run_simulation_fullCov.sh <run_name> [num_ind] [rho] [cluster_threshold]
+# where run_name is compulsory to label all the run-related files
+# num_ind is the number of diploid individuals
+# rho is the population recombination rate per base, 4Ne*r
+# cluster_threshold is a parameter to determine the branch length below which to group leaves in the ancestral recombination graph. The higher threshold, the fewer haplotypes
+```
+
 # Pipeline map
 Here is a quick overview of the pipelines used in the paper:
 ![Pipeline](Pipelines_simulations_1.png?raw=true "Simulation pipeline")
