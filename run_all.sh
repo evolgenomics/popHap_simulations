@@ -23,8 +23,8 @@ echo "[run_all.sh] Starting simulation...
 
 scripts/simulate_reads-molecules.sh $tag
 
-scripts/run_STITCH.sh $tag linkedReads simBam/bamfiles.linkedReads.$tag.968.list --use_bx_tag=TRUE  
-scripts/run_STITCH.sh $tag shortReads simBam/bamfiles.linkedReads.$tag.968.list
+scripts/run_STITCH.sh $tag linkedReads bamfiles.linkedReads.$tag.968.list --use_bx_tag=TRUE  
+scripts/run_STITCH.sh $tag shortReads bamfiles.linkedReads.$tag.968.list
 
 for datatype in linked short; do 
 	scripts/post_STITCH.sh STITCH_out/STITCH_968_${datatype}Reads_$tag; 
