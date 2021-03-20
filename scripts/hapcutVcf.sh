@@ -35,12 +35,12 @@ bcftools view -s $runBC $vcf -i 'INFO/INFO_SCORE >= 0.2'  | awk '/^#/;/CHROM/ {O
 
 ##
 echo "Running HAPCUT2..." 
-samtools index ../$bam;
-extractHAIRS --bam ../$bam --VCF $tmp/$sampleHetVCF --out $tmp/$out.$tag.raw.fragments 
-extractHAIRS --10X 1 --bam ../$bam --VCF $tmp/$sampleHetVCF --out $tmp/$out.$tag.unlinked.fragments 
+samtools index $bam;
+extractHAIRS --bam $bam --VCF $tmp/$sampleHetVCF --out $tmp/$out.$tag.raw.fragments 
+extractHAIRS --10X 1 --bam $bam --VCF $tmp/$sampleHetVCF --out $tmp/$out.$tag.unlinked.fragments 
 grep -ax '.*' $tmp/$out.$tag.unlinked.fragments > $tmp/$out.$tag.unlinked.fragments.1; 
 mv $tmp/$out.$tag.unlinked.fragments.1 $tmp/$out.$tag.unlinked.fragments;
-python3 ${HAPCUT2}/utilities/LinkFragments.py  --bam ../$bam --VCF $tmp/$sampleHetVCF --fragments $tmp/$out.$tag.unlinked.fragments --out $tmp/$out.$tag.linked.fragments -d 50000;
+python3 ${HAPCUT2}/utilities/LinkFragments.py  --bam $bam --VCF $tmp/$sampleHetVCF --fragments $tmp/$out.$tag.unlinked.fragments --out $tmp/$out.$tag.linked.fragments -d 50000;
 ##
 HAPCUT2 --fragments $tmp/$out.$tag.linked.fragments --VCF $tmp/$sampleHetVCF --out $tmp/$out.$tag.hapcut2.threshold_30.output --nf 1 --threshold 30 --error_analysis_mode 1 --call_homozygous 1 --outvcf 1   
 HAPCUT2 --fragments $tmp/$out.$tag.raw.fragments --VCF $tmp/$sampleHetVCF --out $tmp/$out.$tag.hapcut2.threshold_30.unlinked.output --threshold 30 --error_analysis_mode 1 --call_homozygous 1 --outvcf 1   
