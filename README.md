@@ -36,6 +36,8 @@ To run this simulation, you'll need:
 
 # Quick start
 To help you get familiar with the simulation scheme, I have written a quick wrapper script to download the relevant sample data and basic assembly, followed by an example `run_all.sh` script.
+
+Note that for running the molecular phasing part with HAPCUT2 you need to supply the HAPCUT2 location, e.g., `HAPCUT2=/usr/local/$HAPCUT2`
 ```
 git clone https://github.com/evolgenomics/popHap_simulations.git
 cd popHap_simulations
