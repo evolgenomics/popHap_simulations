@@ -9,8 +9,10 @@ my @calls = map{chomp; my @tmp = split "\t"; push @pos, $tmp[0]; [ @tmp[1..$#tmp
 system("awk '{print NR\"\\t\"\$0}' focal.pos > focal.pos.match");
 my @qpos;
 my @truth=map{chomp; my @tmp = split "\t"; push @qpos, $tmp[0]; [ @tmp[1..$#tmp] ]} `bcftools query -f "%POS[\t%GT]\n" ../../simHaps/PC062_merged_Herat1603_3.45Mb.simBlock.$tag.GT.vcf.gz -r Herato1603:3450000-3550000 -T focal.pos`;
+my $start_snp_id = 1;
 
-system("awk '{print NR\"\\t\"\$0}' ../../sourceData/PC062_merged_Herato1603.3.45Mb.PL.AD.HAPCUT2.pos | sort -k 4,4 | join -1 4 -2 3 - focal.pos.match -a 1 | sed 's/ /\\t/g' | awk '{mod=\$2-64219-(\$7-1); if (NF < 7) {mod=0}; print \$3\"\\t\"\$1\"\\t\"\$2\"\\t\"mod\"\\t\"\$7}'  | awk '\$2 >= 3450000 && \$2 <= 3550000' > focal_TRUTH.pos_idx_correction"); 
+system("awk '{print NR\"\\t\"\$0}' ../../sourceData/PC062_merged_Herato1603.3.45Mb.PL.AD.HAPCUT2.pos | sort -k 3,3 | join -1 3 -2 3 - focal.pos.match -a 1 | sed 's/ /\\t/g' | awk '{mod=\$2-$start_snp_id-(\$6-1); if (NF < 7) {mod=0}; print \$3\"\\t\"\$1\"\\t\"\$2\"\\t\"mod\"\\t\"\$6}'  | awk '\$2 >= 3450000 && \$2 <= 3550000' > focal_TRUTH.pos_idx_correction"); 
+#print("awk '{print NR\"\\t\"\$0}' ../../sourceData/PC062_merged_Herato1603.3.45Mb.PL.AD.HAPCUT2.pos | sort -k 4,4 | join -1 4 -2 3 - focal.pos.match -a 1 | sed 's/ /\\t/g' | awk '{mod=\$2-$start_snp_id-(\$7-1); if (NF < 7) {mod=0}; print \$3\"\\t\"\$1\"\\t\"\$2\"\\t\"mod\"\\t\"\$7}'  | awk '\$2 >= 3450000 && \$2 <= 3550000' > focal_TRUTH.pos_idx_correction\n"); 
 
 my %treeSeq_adj;
 map {chomp; my @tmp = split "\t"; $treeSeq_adj{$tmp[0]} = $tmp[1]} `cut -f 3,4 focal_TRUTH.pos_idx_correction`;
@@ -21,8 +23,7 @@ my @treeSeg;
 my $last_tree_str="";
 #0      0       107     28      760     10      0.0103305785123967      5,14,167,181,311,330,356,402,559,733
 #map {chomp; my @tmp = split "\t"; my $tree_str = $tmp[1]."-".$tmp[2]; push @treeSeg, [ ($tmp[1], $tmp[2]) ] if ($last_tree_str ne $tree_str); $last_tree_str = $tree_str; my @hap_id = split ",", $tmp[7]; foreach my $id (0..$#hap_id) {push @{$hapFreq[$hap_id[$id]]}, $tmp[6]}} `cut -f 1-8 ../../simARG/PC062_merged_Herat1603_3_4Mb.$tag.hapFreq.summary | awk '\$5 >= 450000 && \$4 <= 550000'`;
-map {chomp; my @tmp = split "\t"; $treeSeq_adj{$tmp[1]} = 0 if (!(exists($treeSeq_adj{$tmp[1]}))); $treeSeq_adj{$tmp[2]} = 0 if (!(exists($treeSeq_adj{$tmp[2]}))); $tmp[1]-=$treeSeq_adj{$tmp[1]}; $tmp[2]-=$treeSeq_adj{$tmp[2]}; my $tree_str = $tmp[1]."-".$tmp[2]; push @treeSeg, [ ($tmp[1], $tmp[2]) ] if ($last_tree_str ne $tree_str); $last_tree_str = $tree_str; my @hap_id = split ",", $tmp[7]; foreach my $id (0..$#hap_id) {push @{$hapFreq[$hap_id[$id]]}, $tmp[6]}} `cut -f 1-8 ../../simARG/PC062_merged_Herat1603_3.45Mb.$tag.hapFreq.summary | awk '\$5 >= 450000 && \$4 <= 550000'`;
-my $start_snp_id = 64219;
+map {chomp; my @tmp = split "\t"; $treeSeq_adj{$tmp[1]} = 0 if (!(exists($treeSeq_adj{$tmp[1]}))); $treeSeq_adj{$tmp[2]} = 0 if (!(exists($treeSeq_adj{$tmp[2]}))); $tmp[1]-=$treeSeq_adj{$tmp[1]}; $tmp[2]-=$treeSeq_adj{$tmp[2]}; my $tree_str = $tmp[1]."-".$tmp[2]; push @treeSeg, [ ($tmp[1], $tmp[2]) ] if ($last_tree_str ne $tree_str); $last_tree_str = $tree_str; my @hap_id = split ",", $tmp[7]; foreach my $id (0..$#hap_id) {push @{$hapFreq[$hap_id[$id]]}, $tmp[6]}} `cut -f 1-8 ../../simARG/PC062_merged_Herat1603_3.45Mb.$tag.hapFreq.summary`;
 
 die("The positions are not identical!\n") if (@pos != @qpos);
 
