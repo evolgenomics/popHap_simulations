@@ -12,5 +12,5 @@ for frac in 0.01 0.025 0.05 0.075 0.1 0.25 0.5 0.75; do
 	perl ../scripts/mol_subsample.pl $tag $frac
 	ls ${tag}_subsample/hap_$i.linkedReads.diploid.$tag.$frac.bam | sort -k 1,1V > bamfiles.linkedReads.$tag.$frac.968.list
 done
-rm hap*.linkedReads.diploid.$tag.bx
+rm ${tag}_subsample/hap*.linkedReads.diploid.$tag.bx
 cd ../
