@@ -8,6 +8,8 @@ echo "[run_all.sh] Setting up...
 chmod 755 setup.sh
 ./setup.sh
 
+chmod 755 run_*.sh
+
 echo "[run_mspms.sh] Simulate using mspsm 968 haplotypes, 13505 SNPs, at 10 rho using the tag \"example\"...
 ";
 
@@ -32,4 +34,9 @@ for datatype in short linked; do
         ../../scripts/run_hapcut2.sh $tag STITCH_968_${datatype}Reads_$tag;
         ../../scripts/clean_up.sh
         cd ../..
-done;                                                                                                 
+done;
+
+#Optionally, to run subsampling, please uncomment the next command";
+echo "***NOTE: Please adjust run_all.sh if you would wish to run the subsampling part of the pipeline***";
+./run_subsampling.sh $tag
+
