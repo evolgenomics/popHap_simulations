@@ -22,7 +22,7 @@ echo "runBC: $runBC"
 echo "tag: $tag"
 echo "sampleHetVCF: $sampleHetVCF"
 echo "sampleVCF: $sampleVCF"
-if [ -e $tmp/$out.$tag.* ]; then rm $tmp/$out.$tag.*; fi 
+if [ -e $tmp/$out.$tag.*30.output ]; then rm $tmp/$out.$tag.*; fi 
 
 echo "Writing temporary VCF files..." 
 bcftools view -s $runBC $vcf -i 'INFO/INFO_SCORE >= 0.2' | awk '/^#/;/CHROM/ {OFS="\t"}; !/^#/ && $10~/^0\/1/' > $tmp/$sampleHetVCF
