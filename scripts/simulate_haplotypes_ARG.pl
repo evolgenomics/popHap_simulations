@@ -161,9 +161,9 @@ sub tree_hap_assign {
 	$counter = -1;
 	my $last_count = -1;
 	my %level_final;
+	foreach my $k (sort {$levels{$a} <=> $levels{$b}} keys %levels) {
 	### It looks like here it scrambles the haplotype groupings. An alternative would be just to sort by numeric names:
-	#foreach my $k (sort {$levels{$a} <=> $levels{$b}} keys %levels) {
-	foreach my $k (sort {$a <=> $b} keys %levels) {
+	#foreach my $k (sort {$a <=> $b} keys %levels) {
 	$counter++ if ($last_count != $levels{$k});
 		$level_final{$k} = $counter;	
 		$last_count = $levels{$k};
