@@ -17,6 +17,7 @@ echo "[run_all.sh] Generating truth haploytpes...
 ";
 
 perl scripts/simulate_haplotypes_ARG.pl $tag 1 968 0.01
+Rscript scripts/plot_treeSeq.R $tag 
 
 echo "[run_all.sh] Starting simulation...
 ";
