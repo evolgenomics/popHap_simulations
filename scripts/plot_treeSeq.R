@@ -10,7 +10,7 @@ cName<-colnames(treeSeq)
 startStop<-lapply(cName, function(x) {strsplit(x,'.',fixed=T)[[1]][2:3]}) 
 for (int in 1:length(startStop)) {
 	for (i in 1:nrow(treeSeq)) {
-		lines(as.numeric(startStop[[int]]), rep(i, 2), col=colx[(treeSeq[i,int]+1) %% 12]) 	
+		lines(as.numeric(startStop[[int]]), rep(i, 2), col=colx[(treeSeq[i,int]+1) %% 12+1]) 	
 	}
 }
 dev.off()
