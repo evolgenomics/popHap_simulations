@@ -42,6 +42,8 @@ my @treeSeq;
 
 map {s/\[//; s/\](.+)//;push @treeSeq, $1; push @recomb_intervals, [ ($line, $line+$_) ]; $line+=$_} `tail +5 "simARG/mspms_"$tag"_rep$rep.out"`;
 
+my %last_out_leaves;
+
 open(TREESEQ, " | datamash transpose > simTrees/PC062_merged_Herat1603_3.45Mb.$tag.treeSeq");
 #Construct hap lookup, first by iterating along intervals;
 print "Constructing haplotype lookup table by transversing tree sequence...\n";
@@ -50,10 +52,42 @@ foreach my $int (0..$#treeSeq) {
 	my ($snp_start, $snp_end) = @{$recomb_intervals[$int]};
 	my %clustHaps = &tree_hap_assign(&clust_trees($treeSeq[$int], $clust_threshold));
 	my @out_leaves;
-	LEAVE: foreach my $leave (sort {$a <=> $b} keys %clustHaps) {
-		push @out_leaves, $clustHaps{$leave}; 
-		$out_haps[$leave-1].= substr($haps[$clustHaps{$leave}], $snp_start, $snp_end-$snp_start);	
-		last LEAVE if ($leave == $n_haps);	#}
+	
+	my %tmp_sorter;
+	
+	LEAF: foreach my $leaf (sort {$a <=> $b} keys %clustHaps) {
+		$last_out_leaves{($#out_leaves+1)} = "NA" if (!(exists($last_out_leaves{($#out_leaves+1)})));	
+		$tmp_sorter{$last_out_leaves{($#out_leaves+1)}."-".$clustHaps{$leaf}}++;
+		
+		push @out_leaves, $clustHaps{$leaf}; 
+		$out_haps[$leaf-1].= substr($haps[$clustHaps{$leaf}], $snp_start, $snp_end-$snp_start);	
+		last LEAF if ($leaf == $n_haps);	#}
+	}
+	
+	my %new_leaf;
+	my %used_leaf;
+	foreach my $link (sort {$tmp_sorter{$b} <=> $tmp_sorter{$a}} keys %tmp_sorter) {
+		my ($old, $new) = ($1, $2) if ($link=~/(\w+)-(\d+)/);
+		if (!exists($used_leaf{$old})) {
+			if ($old ne "NA") {
+				$new_leaf{$new} = $old;
+			} else {
+				$new_leaf{$new} = $new;
+			}
+			$used_leaf{$old}++;
+		} else {
+			# The old leaf has been assigned to a new, more frequent label already
+			# If the current label hasn't otherwise been assigned either
+			if (!exists($new_leaf{$new})) {
+				$new_leaf{$new} = $new;
+			}
+		}
+	}
+	#Assigning conservatively the outleaves labels;
+	undef %last_out_leaves;
+	foreach my $i (0..$#out_leaves) {
+		$out_leaves[$i] = $new_leaf{$out_leaves[$i]};
+		$last_out_leaves{$i} = $out_leaves[$i];
 	}
 	print TREESEQ "$int/$snp_start-".($snp_end-1)."\t".(join("\t",@out_leaves))."\n";
 }
@@ -162,9 +196,7 @@ sub tree_hap_assign {
 	my $last_count = -1;
 	my %level_final;
 	foreach my $k (sort {$levels{$a} <=> $levels{$b}} keys %levels) {
-	### It looks like here it scrambles the haplotype groupings. An alternative would be just to sort by numeric names:
-	#foreach my $k (sort {$a <=> $b} keys %levels) {
-	$counter++ if ($last_count != $levels{$k});
+		$counter++ if ($last_count != $levels{$k});
 		$level_final{$k} = $counter;	
 		$last_count = $levels{$k};
 	}
